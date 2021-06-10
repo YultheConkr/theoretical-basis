@@ -457,7 +457,7 @@ WHERE S.sname ='Bob'
   UNION ALL
   (SELECT f.destination,
           CAST(t.route || ',' || f.destination AS varchar(20),
-          t.nsegs+1, t.totalcost=f.cost
+          t.nsegs+1, t.totalcost+f.cost
    FROM trips t, flight f
    WHERE t.destination=f.origin
          AND f.destination <> 'SFO'     --控制递归的结束条件1
