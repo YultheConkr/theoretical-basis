@@ -449,7 +449,7 @@ WHERE S.sname ='Bob'
 
 - 飞机航班例子【有向有环图】
 
-  ```
+  ```sql
   WITH trips(destination, route, nsegs, totalcost) AS
   ((SELECT destination, CAST(destination AS varchar(20), 1, cost
   FROM flights
@@ -464,8 +464,6 @@ WHERE S.sname ='Bob'
          AND f.origin <> 'JFK'          --控制递归的结束条件2
          AND t.nseges <= 3              --控制递归的结束条件3
          ```
-  
-  - 控制递归的结束条件
 
 ### 数据操纵语言
 
