@@ -442,7 +442,9 @@ WHERE S.sname ='Bob'
   (SELECT f.name,f.salary   【recursive query】
   FROM agents AS a,FedEmp AS f
   WHERE f.manager=a.name))
-  SELECT name 【final query】        
+  SELECT name 【final query】
+  WHERE agents
+  FROM salary>100000;
   ```
 
 - 飞机零件例子【有向无环图】
