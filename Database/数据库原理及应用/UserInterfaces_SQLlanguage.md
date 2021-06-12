@@ -583,7 +583,7 @@ WHERE SNO=:GIVENSNO AND CNO=:GIVENCNO;
 
   - ```c
     EXEC SQL FETCH 游标名
-    	INTO  :hostvar1,:hostvar2;
+    INTO  :hostvar1,:hostvar2;
     ```
 
 - 判断查询结果是否取完，取了100条元组
@@ -633,7 +633,7 @@ WHERE SNO=:GIVENSNO AND CNO=:GIVENCNO;
 
   - ```c
     EXEC SQL PREPARE query FROM :sqlstring;   【先准备一下查询语句，并使用这句】
-    EXEC SQL DECLARE grade_cursor CURSOR FOR query; 【为query建立一个游标】
+    EXEC SQL DECLARE grade_cursor CURSOR FOR query; 【为query建立一个游标，此处是为了后续FETCH操作而启动，与动态查询语句无关】
     EXEC SQL OPEN grade_cursor USING :GIVENCNO; 【在此处替换占位符】
     ```
 
