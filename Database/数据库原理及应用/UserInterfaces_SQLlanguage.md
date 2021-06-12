@@ -524,7 +524,7 @@ WHERE S.sname ='Bob'
 - SQLCA.SQLCODE 可以判断查询结果
 - 用说明符来表示宿主变量的NULL
 
-###### 定义数组变量
+###### 定义宿主变量
 
 ```c
 EXEC SQL BEGIN DECLARE SECTION;
@@ -542,13 +542,13 @@ EXEC SQL END DECLARE SECTION;
 - 连接
 
 ```c
-EXEC SQL CONNECT :uid IDENTIFIED BU:pws: ;
+EXEC SQL CONNECT :uid IDENTIFIED BY:pwd: ;
 ```
 
 - 执行DML语句
 
 ```c
-EXEC SQL INSERT INTO SC(SNO,CNO,GRADE)VALUES(SNO,:CNO,:GRADE);
+EXEC SQL INSERT INTO SC(SNO,CNO,GRADE)VALUES(:SNO,:CNO,:GRADE);
 ```
 
 - 查询【简单查询，返回一个值】
