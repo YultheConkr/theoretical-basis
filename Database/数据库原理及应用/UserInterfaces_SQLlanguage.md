@@ -516,7 +516,7 @@ WHERE S.sname ='Bob'
 ##### 以C语言中的嵌入式SQL
 
 - 以ECEC SQL,开始，以；结尾会被预编译器识别为嵌入式SQL命令
-- 用宿主变量在DBMS和应用程序之间交换数据和消息
+- 用宿主变量在DBMS和应用程序之间交换数据和消息，相当于取出的和要写入的变量的中间接口
 - 在SQL命令里，可以用：的方法引用宿主变量的值
 - 宿主变量在C语言中就当一个普通的变量使用
 - 不可以把宿主变量定义为数组或结构
@@ -551,7 +551,8 @@ EXEC SQL CONNECT :uid IDENTIFIED BY:pwd: ;
 EXEC SQL INSERT INTO SC(SNO,CNO,GRADE)VALUES(:SNO,:CNO,:GRADE);
 ```
 
-- 查询【简单查询，返回一个值】
+- 查询【简单查询，返回一个值】此处的例子查询的返回值仅有一组，故可以这么做
+
 
 ```C
 EXEC SQL SELECT GRADE INTO :GRADE,:GRADE1
@@ -565,27 +566,27 @@ WHERE SNO=:GIVENSNO AND CNO=:GIVENCNO;
 
 - 定义游标
 
-  - ```
+  - ```c
     EXEC SQL DECLARE 游标名 CURSOR FOR
     SELECT
     FROM 
     WHERE
     ```
 
-- 执行游标【可以理解为打开一个文件】
+- 执行游标【可以理解为返回结果是一个文件，OPEN操作就是打开这个文件】
 
   - ```c
     EXEC SQL OPEN 游标名
     ```
 
-- 取游标内每一条元组
+- 取游标内每一条元组内自己想要的属性，每条都可以取。取出来之后按顺序赋值给变量，C语言就可以处理了。每调用一次FETCH只取一个元组内的多个值。
 
   - ```c
     EXEC SQL FETCH 游标名
     	INTO  :hostvar1,:hostvar2;
     ```
 
-- 判断查询结果是否取完
+- 判断查询结果是否取完，取了100条元组
 
   - SQLCA.SQLCODE ==100 时取完
 
@@ -617,20 +618,22 @@ WHERE SNO=:GIVENSNO AND CNO=:GIVENCNO;
 
 - 动态SQL的查询【带动态参数】
 
-  - 运用占位符
+  - 运用占位符，即y（:的含义是引用宿主变量）
+  - ```c
+    strcpy(sqlstring, "DELETE FROM STUDENT WHERE YEAR(BDATE) <=:y;");
 
   - ```c
     EXEC SQL PREPARE PURGE FROM :sqlstring;【sql命令执行准备】
-    EXEC SQL EXECUTE PURGE USING:birth_yers;【将参数替换】
+    EXEC SQL EXECUTE PURGE USING:birth_year;【将占位符替换】
     ```
 
 - 动态构造查询语句
 
-  - 用字符数组动态拼接出一条查询语句
+  - 用字符数组动态拼接出一条查询语句，需要有占位符
 
   - ```c
-    EXEC SQL PREPARE query FROM :sqlstring;   【先准备一下查询语句】
-    EXEC SQL DECLARE grade_cursor CURSOR FOR query; 【建立一个游标】
+    EXEC SQL PREPARE query FROM :sqlstring;   【先准备一下查询语句，并使用这句】
+    EXEC SQL DECLARE grade_cursor CURSOR FOR query; 【为query建立一个游标】
     EXEC SQL OPEN grade_cursor USING :GIVENCNO; 【在此处替换占位符】
     ```
 
